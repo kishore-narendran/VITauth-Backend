@@ -21,11 +21,62 @@
 var express = require('express');
 var router = express.Router();
 
+/* GET home page. */
 var home = function (req, res) {
     console.log("VIT-API Home");
     res.json();
 };
-/* GET home page. */
-router.get('/', home);
 
+var addExam = function(req, res) {
+  var semester = req.body.semester;
+  var exam = req.body.exam;
+  var slot = req.body.slot;
+  var venue = req.body.venue;
+  var time = req.body.time;
+  var classes = req.body.classes;
+  var onInsert = function(err, records) {
+    if(err) {
+      res.json({"status": "failure"});
+    }
+    else{
+      res.json({"status": "success"});
+    }
+  };
+  req.db.collection('exams').insert({"semester": semester, "exam": exam, "slot": slot, "venue": venue, "time": time, "classes": classes}, onInsert);
+};
+
+var addClass = function(req, res) {
+  var cnum = req.body.cnum;
+  var type = req.body.type;
+  var title = req.body.title;
+  var students = req.body.students;
+  var onInsert = function(err, records) {
+    if(err) {
+      res.json({"status": "failure"});
+    }
+    else {
+      res.json({"status": "success"});
+    }
+  };
+  req.db.collection('classes').insert({"cnum": cnum, "type": type, "title": title, "students": students}, onInsert);
+};
+
+var addStudent = function(req, res) {
+  var regno = req.body.regno;
+  var name = req.body.name;
+  var onInsert = function(err, records) {
+    if(err) {
+      res.json({"status": "failure"});
+    }
+    else {
+      res.json({"status": "success"});
+    }
+  };
+  req.db.collection('students').insert({"name": name, "regno": regno}, onInsert);
+};
+
+router.get('/', home);
+router.post('/addexam', addExam);
+router.post('/addclass', addClass);
+router.post('/addstudent', addStudent);
 module.exports = router;

@@ -94,11 +94,17 @@ var mongodbOptions = {
         server: {
             socketOptions: {
                 keepAlive: 1,
-                connectTimeoutMS: 10000
+                connectTimeoutMS: 30000
             },
             auto_reconnect: true,
             poolSize: 50
-        }
+        },
+        replset: {
+            socketOptions: {
+                keepAlive: 1,
+                connectTimeoutMS: 30000
+            }
+        },
     }
 };
 app.use(mongodb(require('mongodb'), mongodbOptions));

@@ -43,7 +43,18 @@ var addExam = function(req, res) {
       res.json({"status": "success"});
     }
   };
-  req.db.collection("exams").insert({"semester": semester, "exam": exam, "slot": slot, "venue": venue, "time": time, "classes": classes}, onInsert);
+  var onExamFind = function(err, result) {
+    if(err) {
+      res.json({"status": "failure"});
+    }
+    else if(result == null){
+      req.db.collection("exams").insert({"semester": semester, "exam": exam, "slot": slot, "venue": venue, "time": time, "classes": classes}, onInsert);
+    }
+    else{
+      res.json({"status": "failure"});
+    }
+  }
+  req.db.collection("exams").findOne({"semester": semester, "exam": exam, "slot": slot, "venue": venue}, onExamFind);
 };
 
 var bulkAddExam = function(req, res) {
@@ -84,7 +95,18 @@ var addClass = function(req, res) {
       res.json({"status": "success"});
     }
   };
-  req.db.collection("classes").insert({"cnum": cnum, "type": type, "title": title, "students": students, "venue": venue, "mode": mode, "option": option, "credits": credits, "code": code, "slot": slot}, onInsert);
+  var onClassFind = function(err, result) {
+    if(err) {
+      res.json({"status": "failure"});
+    }
+    else if(result == null) {
+      req.db.collection("classes").insert({"cnum": cnum, "type": type, "title": title, "students": students, "venue": venue, "mode": mode, "option": option, "credits": credits, "code": code, "slot": slot}, onInsert);
+    }
+    else {
+      res.json({"status": "failure"});
+    }
+  }
+  req.db.collection("classes").findOne({"cnum": cnum}, onClassFind)
 };
 
 var bulkAddClass = function(req, res) {
@@ -117,7 +139,18 @@ var addStudent = function(req, res) {
       res.json({"status": "success"});
     }
   };
-  req.db.collection('students').insert({"name": name, "regno": regno}, onInsert);
+  var onStudentFind = function(err, result) {
+    if(err){
+      res.json({"status": "failure"});
+    }
+    else if(result == null) {
+      req.db.collection("students").insert({"name": name, "regno": regno}, onInsert);
+    }
+    else{
+      res.json({"status": "failure"});
+    }
+  };
+  req.db.collection("students").findOne({"regno": regno}, onStudentFind);
 };
 
 var bulkAddStudent = function(req, res) {
@@ -146,4 +179,5 @@ router.post('/addclass', addClass);
 router.post('/bulkaddclass', bulkAddClass);
 router.post('/addstudent', addStudent);
 router.post('/bulkaddstudent', bulkAddStudent);
+
 module.exports = router;

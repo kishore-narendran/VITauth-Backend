@@ -50,6 +50,7 @@
     "jade": "~1.9.2",
     "mongodb": "^1.4.31",
     "morgan": "~1.5.1",
+    "multer": "~0.1.8",
     "newrelic": "~1.16.4",
     "node-logentries": "~0.1.4",
     "serve-favicon": "~2.2.0"

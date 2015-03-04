@@ -25,6 +25,7 @@ var favicon = require('serve-favicon');
 var logger = require('morgan');
 var mongodb = require('express-mongo-db');
 var path = require('path');
+var multer = require('multer');
 
 var newrelic;
 if (process.env.NEWRELIC_APP_NAME && process.env.NEWRELIC_LICENSE) {
@@ -74,6 +75,9 @@ app.use(bodyParser.urlencoded({extended: true}));
 // Cookie Parser
 var secret = process.env.SECRET_KEY || 'randomsecretstring';
 app.use(cookieParser(secret, {signed: true}));
+
+//Multer for image uploading
+app.use(multer({dest: "./uploads"}));
 
 // MongoDB
 var mongodbOptions = {

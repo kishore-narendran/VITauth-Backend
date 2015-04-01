@@ -21,6 +21,7 @@
 var express = require('express');
 var async = require('async');
 var router = express.Router();
+var fs = require('fs');
 
 /* GET home page. */
 var home = function (req, res) {
@@ -172,6 +173,33 @@ var bulkAddStudent = function(req, res) {
   async.map(students, onStudentAdd, onComplete);
 };
 
+var uploadPhotoForm = function(req, res, next) {
+  res.render('upload_photo.jade', {title: "Upload Student Photo"});
+}
+
+var uploadAction = function(req, res) {
+  var regno = req.files.studentPhoto.originalname;
+  regno = regno.substring(0, regno.indexOf('.'));
+  var path = 'uploads/' + req.files.studentPhoto.name;
+  var encoding = req.files.studentPhoto.encoding;
+  var onUpdate = function(err, result) {
+    if(err) {
+      res.json({"status": "failure"});
+    }
+    else {
+      res.json({"status": "success"});
+    }
+  };
+  var onFileRead = function(err, data) {
+    if(err) {
+      res.json({"status": "failure"});
+    }
+    else {
+      req.db.collection("students").update({"regno": regno}, {"photo": data}, onUpdate);
+    }
+  };
+  fs.readFile(path, onFileRead);
+}
 router.get('/', home);
 router.post('/addexam', addExam);
 router.post('/bulkaddexam', bulkAddExam);
@@ -179,5 +207,6 @@ router.post('/addclass', addClass);
 router.post('/bulkaddclass', bulkAddClass);
 router.post('/addstudent', addStudent);
 router.post('/bulkaddstudent', bulkAddStudent);
-
+router.get('/uploadform', uploadPhotoForm);
+router.post('/uploadphoto', uploadAction);
 module.exports = router;

@@ -199,9 +199,8 @@ var uploadPhotoForm = function (req, res, next) {
 };
 
 var uploadAction = function (req, res) {
-    var regno = req.files.studentPhoto.originalname.substring(0, regno.indexOf('.'));
+    var regno = req.files.studentPhoto.originalname.split('.')[0];
     var path = os.tmpDir() + req.files.studentPhoto.name;
-    // var encoding = req.files.studentPhoto.encoding;
     var onUpdate = function (err, result) {
         if (err) {
             res.json({"status": "failure"});

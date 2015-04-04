@@ -67,8 +67,7 @@ if (newrelic) {
 app.use(express.static(path.join(__dirname, 'public')));
 
 // Favicon
-// Uncomment after placing your favicon in /public
-// app.use(favicon(path.join(__dirname, 'public', 'images', 'favicon.png')));
+app.use(favicon(path.join(__dirname, 'public', 'images', 'favicon.png')));
 
 // Body Parser
 app.use(bodyParser.json());
@@ -110,7 +109,7 @@ var mongodbOptions = {
                 keepAlive: 1,
                 connectTimeoutMS: 10000
             }
-        },
+        }
     }
 };
 app.use(mongodb(require('mongodb'), mongodbOptions));
@@ -137,7 +136,7 @@ if (app.get('env') === 'development') {
         res.render('error', {
             message: err.message,
             status: err.status,
-            stack: err.stack,
+            stack: err.stack
         });
     });
 }
@@ -151,7 +150,7 @@ app.use(function (err, req, res, next) {
     res.render('error', {
         message: err.message,
         status: err.status,
-        stack: '',
+        stack: ''
     });
 });
 

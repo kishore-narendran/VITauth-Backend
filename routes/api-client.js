@@ -36,18 +36,18 @@ var getExamInfo = function (req, res) {
     var time = req.body.time;
     var onClassFind = function (err, result) {
         if (err) {
-            res.json({"status": "failure"})
+            res.json({status: 'failure'})
         }
         else {
-            res.json({"status": "success", "classes": result.classes});
+            res.json({status: 'success', classes: result.classes});
         }
     };
     req.db.collection('exams').findOne({
-        "semester": semester,
-        "exam": exam,
-        "slot": slot,
-        "venue": venue,
-        "time": time
+        semester: semester,
+        exam: exam,
+        slot: slot,
+        venue: venue,
+        time: time
     }, onClassFind);
 };
 var submitExamReport = function (req, res) {
@@ -59,19 +59,19 @@ var submitExamReport = function (req, res) {
     var classes = req.body.classes;
     var onInsert = function (err, result) {
         if (err) {
-            res.json({"status": "failure"})
+            res.json({status: 'failure'})
         }
         else {
-            res.json({"status": "success"});
+            res.json({status: 'success'});
         }
     };
     req.db.collection('reports').insert({
-        "semester": semester,
-        "exam": exam,
-        "slot": slot,
-        "venue": venue,
-        "time": time,
-        "classes": classes
+        semester: semester,
+        exam: exam,
+        slot: slot,
+        venue: venue,
+        time: time,
+        classes: classes
     }, onInsert);
 
 };

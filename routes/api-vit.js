@@ -41,44 +41,44 @@ var addExam = function (req, res) {
     var classes = req.body.classes;
     var onInsert = function (err, records) {
         if (err) {
-            res.json({"status": "failure"});
+            res.json({status: 'failure'});
         }
         else {
-            res.json({"status": "success"});
+            res.json({status: 'success'});
         }
     };
     var onExamFind = function (err, result) {
         if (err) {
-            res.json({"status": "failure"});
+            res.json({status: 'failure'});
         }
         else if (result == null) {
-            req.db.collection("exams").insert({
-                "semester": semester,
-                "exam": exam,
-                "slot": slot,
-                "venue": venue,
-                "time": time,
-                "classes": classes
+            req.db.collection('exams').insert({
+                semester: semester,
+                exam: exam,
+                slot: slot,
+                venue: venue,
+                time: time,
+                classes: classes
             }, onInsert);
         }
         else {
-            res.json({"status": "failure"});
+            res.json({status: 'failure'});
         }
     };
-    req.db.collection("exams").findOne({"semester": semester, "exam": exam, "slot": slot, "venue": venue}, onExamFind);
+    req.db.collection('exams').findOne({semester: semester, exam: exam, slot: slot, venue: venue}, onExamFind);
 };
 
 var bulkAddExam = function (req, res) {
     var exams = req.body.exams;
     var onComplete = function (err, result) {
         if (err) {
-            res.json({"status": "failure"});
+            res.json({status: 'failure'});
         }
         else if (result.length == exams.length) {
-            res.json({"status": "success"});
+            res.json({status: 'success'});
         }
         else {
-            res.json({"status": "failure"});
+            res.json({status: 'failure'});
         }
     };
     var onExamAdd = function (exam, callback) {
@@ -100,52 +100,52 @@ var addClass = function (req, res) {
     var students = req.body.students;
     var onInsert = function (err, records) {
         if (err) {
-            res.json({"status": "failure"});
+            res.json({status: 'failure'});
         }
         else {
-            res.json({"status": "success"});
+            res.json({status: 'success'});
         }
     };
     var onClassFind = function (err, result) {
         if (err) {
-            res.json({"status": "failure"});
+            res.json({status: 'failure'});
         }
         else if (result == null) {
-            req.db.collection("classes").insert({
-                "cnum": cnum,
-                "type": type,
-                "title": title,
-                "students": students,
-                "venue": venue,
-                "mode": mode,
-                "option": option,
-                "credits": credits,
-                "code": code,
-                "slot": slot
+            req.db.collection('classes').insert({
+                cnum: cnum,
+                type: type,
+                title: title,
+                students: students,
+                venue: venue,
+                mode: mode,
+                option: option,
+                credits: credits,
+                code: code,
+                slot: slot
             }, onInsert);
         }
         else {
-            res.json({"status": "failure"});
+            res.json({status: 'failure'});
         }
     };
-    req.db.collection("classes").findOne({"cnum": cnum}, onClassFind)
+    req.db.collection('classes').findOne({cnum: cnum}, onClassFind)
 };
 
 var bulkAddClass = function (req, res) {
     var classes = req.body.classes;
     var onComplete = function (err, result) {
         if (err) {
-            res.json({"status": "failure"});
+            res.json({status: 'failure'});
         }
         else if (result.length == classes.length) {
-            res.json({"status": "success"});
+            res.json({status: 'success'});
         }
         else {
-            res.json({"status": "failure"});
+            res.json({status: 'failure'});
         }
     };
     var onClassAdd = function (class1, callback) {
-        req.db.collection("classes").insert(class1, callback);
+        req.db.collection('classes').insert(class1, callback);
     };
     async.map(classes, onClassAdd, onComplete);
 };
@@ -155,47 +155,43 @@ var addStudent = function (req, res) {
     var name = req.body.name;
     var onInsert = function (err, records) {
         if (err) {
-            res.json({"status": "failure"});
+            res.json({status: 'failure'});
         }
         else {
-            res.json({"status": "success"});
+            res.json({status: 'success'});
         }
     };
     var onStudentFind = function (err, result) {
         if (err) {
-            res.json({"status": "failure"});
+            res.json({status: 'failure'});
         }
         else if (result == null) {
-            req.db.collection("students").insert({"name": name, "regno": regno}, onInsert);
+            req.db.collection('students').insert({name: name, regno: regno}, onInsert);
         }
         else {
-            res.json({"status": "failure"});
+            res.json({status: 'failure'});
         }
     };
-    req.db.collection("students").findOne({"regno": regno}, onStudentFind);
+    req.db.collection('students').findOne({regno: regno}, onStudentFind);
 };
 
 var bulkAddStudent = function (req, res) {
     var students = req.body.students;
     var onComplete = function (err, result) {
         if (err) {
-            res.json({"status": "failure"});
+            res.json({status: 'failure'});
         }
         else if (result.length == students.length) {
-            res.json({"status": "success"});
+            res.json({status: 'success'});
         }
         else {
-            res.json({"status": "failure"});
+            res.json({status: 'failure'});
         }
     };
     var onStudentAdd = function (student, callback) {
-        req.db.collection("students").insert(student, callback);
+        req.db.collection('students').insert(student, callback);
     };
     async.map(students, onStudentAdd, onComplete);
-};
-
-var uploadPhotoForm = function (req, res, next) {
-    res.render('upload_photo.jade', {title: "Upload Student Photo"});
 };
 
 var uploadAction = function (req, res) {
@@ -203,18 +199,18 @@ var uploadAction = function (req, res) {
     var path = os.tmpDir() + req.files.studentPhoto.name;
     var onUpdate = function (err, result) {
         if (err) {
-            res.json({"status": "failure"});
+            res.json({status: 'failure'});
         }
         else {
-            res.json({"status": "success"});
+            res.json({status: 'success'});
         }
     };
     var onFileRead = function (err, data) {
         if (err) {
-            res.json({"status": "failure"});
+            res.json({status: 'failure'});
         }
         else {
-            req.db.collection("students").update({"regno": regno}, {"photo": data}, onUpdate);
+            req.db.collection('students').update({regno: regno}, {photo: data}, onUpdate);
         }
     };
     fs.readFile(path, onFileRead);
@@ -227,7 +223,6 @@ router.post('/addclass', addClass);
 router.post('/bulkaddclass', bulkAddClass);
 router.post('/addstudent', addStudent);
 router.post('/bulkaddstudent', bulkAddStudent);
-router.get('/uploadform', uploadPhotoForm);
 router.post('/uploadphoto', uploadAction);
 
 module.exports = router;

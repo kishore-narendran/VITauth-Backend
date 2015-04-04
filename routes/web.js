@@ -24,8 +24,12 @@ var express = require('express');
 var router = express.Router();
 
 
-router.get('/', function (req, res, next) {
+router.get('/', function (req, res) {
     res.render('index', {title: 'VITauth System'});
+});
+
+router.get('/vit/uploadphoto', function (req, res) {
+    res.render('upload_photo.jade', {title: 'Upload Student Photo'});
 });
 
 module.exports = router;

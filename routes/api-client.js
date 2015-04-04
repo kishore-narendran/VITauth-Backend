@@ -18,51 +18,68 @@
  *  along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+'use strict';
+
 var express = require('express');
 var router = express.Router();
 
+
 var home = function (req, res) {
-    console.log("ClientAPI Home");
+    console.log("VITauth Client API Home");
     res.json();
 };
 
-var getExamInfo = function(req, res){
-	var semester = req.body.semester;
-	var exam = req.body.exam;
-	var slot = req.body.slot;
-	var venue = req.body.venue;
-    var time= req.body.time;
-    var onClassFind = function(err, result){
-    	if (err) {
-    		res.json({"status": "failure"})
-    	}
-        else {
-        	res.json({"status": "success", "classes": result.classes});
+var getExamInfo = function (req, res) {
+    var semester = req.body.semester;
+    var exam = req.body.exam;
+    var slot = req.body.slot;
+    var venue = req.body.venue;
+    var time = req.body.time;
+    var onClassFind = function (err, result) {
+        if (err) {
+            res.json({"status": "failure"})
         }
-    }
-    req.db.collection('exams').findOne({"semester": semester, "exam" :exam, "slot": slot, "venue": venue, "time": time}, onClassFind);
+        else {
+            res.json({"status": "success", "classes": result.classes});
+        }
+    };
+    req.db.collection('exams').findOne({
+        "semester": semester,
+        "exam": exam,
+        "slot": slot,
+        "venue": venue,
+        "time": time
+    }, onClassFind);
 };
-var submitExamReport = function(req,res) {
-	var semester = req.body.semester;
-	var exam = req.body.exam;
-	var slot = req.body.slot;
-	var venue = req.body.venue;
+var submitExamReport = function (req, res) {
+    var semester = req.body.semester;
+    var exam = req.body.exam;
+    var slot = req.body.slot;
+    var venue = req.body.venue;
     var time = req.body.time;
     var classes = req.body.classes;
-    var onInsert = function(err, result){
-    	if (err) {
-    		res.json({"status": "failure"})
-    	}
-        else {
-        	res.json({"status": "success"});
+    var onInsert = function (err, result) {
+        if (err) {
+            res.json({"status": "failure"})
         }
-    }
-    req.db.collection('reports').insert({"semester": semester, "exam" :exam, "slot": slot, "venue": venue, "time": time, "classes": classes}, onInsert);
- 
-}
+        else {
+            res.json({"status": "success"});
+        }
+    };
+    req.db.collection('reports').insert({
+        "semester": semester,
+        "exam": exam,
+        "slot": slot,
+        "venue": venue,
+        "time": time,
+        "classes": classes
+    }, onInsert);
+
+};
 
 /* GET home page. */
 router.get('/', home);
 router.post('/getexaminfo', getExamInfo);
 router.post('/submitexamreport', submitExamReport);
+
 module.exports = router;

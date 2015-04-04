@@ -20,6 +20,8 @@
  *  along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+'use strict';
+
 var http = require('http');
 var path = require('path');
 
@@ -88,11 +90,11 @@ function onError(error) {
 }
 
 function onListening() {
-  var addr = server.address();
-  var bind = typeof addr === 'string'
-      ? 'pipe ' + addr
-      : 'port ' + addr.port;
-  var config = {
+    var addr = server.address();
+    var bind = typeof addr === 'string'
+        ? 'pipe ' + addr
+        : 'port ' + addr.port;
+    var config = {
         Network: addr,
         MongoDB_Host: process.env.MONGODB_HOST || 'localhost',
         MongoDB_Port: process.env.MONGODB_PORT || '27017',
@@ -104,5 +106,5 @@ function onListening() {
     if (log) {
         log.log('info', config);
     }
-    console.log('Node.js Express Server started, Config: ' + JSON.stringify(config));
+    console.log('Express.js Server started on ' + bind + ' , Config: ' + JSON.stringify(config));
 }

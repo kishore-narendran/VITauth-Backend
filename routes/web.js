@@ -18,12 +18,14 @@
  *  along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+'use strict';
+
 var express = require('express');
 var router = express.Router();
 
-/* GET home page. */
+
 router.get('/', function (req, res, next) {
-    res.render('index', {title: 'VITauth-Backend System'});
+    res.render('index', {title: 'VITauth System'});
 });
 
 module.exports = router;

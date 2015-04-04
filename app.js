@@ -18,14 +18,17 @@
  *  along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+'use strict';
+
 var bodyParser = require('body-parser');
 var cookieParser = require('cookie-parser');
 var express = require('express');
 var favicon = require('serve-favicon');
 var logger = require('morgan');
 var mongodb = require('express-mongo-db');
-var path = require('path');
 var multer = require('multer');
+var os = require('os');
+var path = require('path');
 
 var newrelic;
 if (process.env.NEWRELIC_APP_NAME && process.env.NEWRELIC_LICENSE) {
@@ -40,10 +43,9 @@ if (process.env.LOGENTRIES_TOKEN) {
     });
 }
 
-var routes = require(path.join(__dirname, 'routes', 'index'));
-var users = require(path.join(__dirname, 'routes', 'users'));
-var clientapi = require(path.join(__dirname, 'routes', 'clientapi'));
-var vitapi = require(path.join(__dirname, 'routes', 'vitapi'));
+var webRoutes = require(path.join(__dirname, 'routes', 'web'));
+var apiClientRoutes = require(path.join(__dirname, 'routes', 'api-client'));
+var apiVITRoutes = require(path.join(__dirname, 'routes', 'api-vit'));
 
 var app = express();
 
@@ -76,8 +78,8 @@ app.use(bodyParser.urlencoded({extended: true}));
 var secret = process.env.SECRET_KEY || 'randomsecretstring';
 app.use(cookieParser(secret, {signed: true}));
 
-//Multer for image uploading
-app.use(multer({dest: "./uploads"}));
+// Multer for image uploading
+app.use(multer({dest: os.tmpDir()}));
 
 // MongoDB
 var mongodbOptions = {
@@ -98,7 +100,7 @@ var mongodbOptions = {
         server: {
             socketOptions: {
                 keepAlive: 1,
-                connectTimeoutMS: 30000
+                connectTimeoutMS: 10000
             },
             auto_reconnect: true,
             poolSize: 50
@@ -106,17 +108,16 @@ var mongodbOptions = {
         replset: {
             socketOptions: {
                 keepAlive: 1,
-                connectTimeoutMS: 30000
+                connectTimeoutMS: 10000
             }
         },
     }
 };
 app.use(mongodb(require('mongodb'), mongodbOptions));
 
-app.use('/', routes);
-app.use('/users', users);
-app.use('/vitapi', vitapi);
-app.use('/clientapi', clientapi);
+app.use('/', webRoutes);
+app.use('/api/vit', apiVITRoutes);
+app.use('/api/client', apiClientRoutes);
 
 // catch 404 and forward to error handler
 app.use(function (req, res, next) {

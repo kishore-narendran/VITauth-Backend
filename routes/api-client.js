@@ -25,8 +25,7 @@ var router = express.Router();
 
 
 var home = function (req, res) {
-    console.log("VITauth Client API Home");
-    res.json();
+    res.send('VITauth Client API Home');
 };
 
 var getExamInfo = function (req, res) {

@@ -3,6 +3,6 @@ html(lang='en')
     head
         title= title
     body
-        form(action="/vitapi/uploadphoto", method="post", enctype="multipart/form-data")
+        form(action="/api/vit/uploadphoto", method="post", enctype="multipart/form-data")
             input(type="file", name="studentPhoto")
             input(type="submit")

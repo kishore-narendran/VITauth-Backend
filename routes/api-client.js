@@ -34,12 +34,20 @@ var getExamInfo = function (req, res) {
     var slot = req.body.slot;
     var venue = req.body.venue;
     var time = req.body.time;
+    var empid = parseInt(req.body.empid);
     var onClassFind = function (err, result) {
         if (err) {
             res.json({status: 'failure'})
         }
         else {
-            res.json({status: 'success', classes: result.classes});
+            var allowedEmpids = result.empids;
+            if(allowedEmpids.indexOf(empid) > -1) {
+                res.json({status: 'success', classes: result.classes});
+            }
+            else {
+                res.json({status: 'failure'});
+            }
+
         }
     };
     req.db.collection('exams').findOne({

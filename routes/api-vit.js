@@ -39,6 +39,7 @@ var addExam = function (req, res) {
     var venue = req.body.venue;
     var time = req.body.time;
     var classes = req.body.classes;
+    var empids = req.body.empids;
     var onInsert = function (err, records) {
         if (err) {
             res.json({status: 'failure'});
@@ -58,7 +59,8 @@ var addExam = function (req, res) {
                 slot: slot,
                 venue: venue,
                 time: time,
-                classes: classes
+                classes: classes,
+                empids: empids
             }, onInsert);
         }
         else {

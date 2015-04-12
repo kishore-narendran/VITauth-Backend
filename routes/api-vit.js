@@ -196,7 +196,7 @@ var bulkAddStudent = function (req, res) {
     async.map(students, onStudentAdd, onComplete);
 };
 
-var uploadAction = function (req, res) {
+var uploadPhotoAction = function (req, res) {
     var regno = req.files.studentPhoto.originalname.split('.')[0];
     var path = os.tmpDir() + req.files.studentPhoto.name;
     var onUpdate = function (err, result) {
@@ -218,6 +218,29 @@ var uploadAction = function (req, res) {
     fs.readFile(path, onFileRead);
 };
 
+var uploadFingerprintAction = function (req, res) {
+    var regno = req.files.studentFingerprint.originalname.split('.')[0];
+    var path = os.tmpDir() + req.files.studentFingerprint.name;
+    var onUpdate = function (err, result) {
+        if (err) {
+            res.json({status: 'failure'});
+        }
+        else {
+            res.json({status: 'success'});
+        }
+    };
+    var onFileRead = function (err, data) {
+        if (err) {
+            res.json({status: 'failure'});
+        }
+        else {
+            req.db.collection('students').update({regno: regno}, {fingerprint: data}, onUpdate);
+        }
+    };
+    fs.readFile(path, onFileRead);
+};
+
+
 router.get('/', home);
 router.post('/addexam', addExam);
 router.post('/bulkaddexam', bulkAddExam);
@@ -225,6 +248,6 @@ router.post('/addclass', addClass);
 router.post('/bulkaddclass', bulkAddClass);
 router.post('/addstudent', addStudent);
 router.post('/bulkaddstudent', bulkAddStudent);
-router.post('/uploadphoto', uploadAction);
-
+router.post('/uploadphoto', uploadPhotoAction);
+router.post('/uploadfingerprint', uploadFingerprintAction);
 module.exports = router;

@@ -32,4 +32,8 @@ router.get('/vit/uploadphoto', function (req, res) {
     res.render('upload_photo.jade', {title: 'Upload Student Photo'});
 });
 
+router.get('/vit/uploadfingerprint', function(req, res) {
+    res.render('/upload_fingerprint.jade', {title: 'Upload Student Fingerprint'});
+});
+
 module.exports = router;
